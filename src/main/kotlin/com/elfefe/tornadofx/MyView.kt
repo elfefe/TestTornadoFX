@@ -1,14 +1,14 @@
 package com.elfefe.tornadofx
 
 import javafx.scene.Parent
-import tornadofx.View
-import tornadofx.button
-import tornadofx.label
-import tornadofx.vbox
+import tornadofx.*
 
 class MyView: View() {
-    override val root = vbox {
-        button("Press me")
-        label("waiting")
+    override val root = borderpane {
+        left<LeftSideBar>()
+        center<RightContentPanel>()
+        style {
+            backgroundColor += c("#ffffff", 1.0)
+        }
     }
 }
