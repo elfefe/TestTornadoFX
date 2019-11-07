@@ -5,12 +5,15 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableArray
 import javafx.collections.ObservableList
 import javafx.event.EventType
+import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Parent
 import javafx.scene.control.*
 import javafx.scene.effect.DropShadow
 import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Region
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import org.intellij.lang.annotations.JdkConstants
 import javafx.scene.web.WebEngine
@@ -65,12 +68,7 @@ class TabCom : View() {
     private  val message: ObservableList<Message> = FXCollections.observableArrayList(Message("Coucou"))
     override val root = borderpane {
         center {
-            val messageListView = ListView<Message>(message)
-            messageListView.cellFactory = Callback {
-                MessageCell()
-            }
-
-            add(messageListView)
+            add(MessageHolder(message))
         }
 
         bottom {
@@ -88,17 +86,16 @@ class TabCom : View() {
     }
 }
 
-class MessageCell(): ListCell<Message>() {
-    override fun updateItem(item: Message?, empty: Boolean) {
-        super.updateItem(item, empty)
-        if(item != null) {
-            text = item.messageBox.text
-
-            style {
-                borderColor += box(c("#333333"))
-                borderStyle += BorderStrokeStyle.SOLID
-                borderWidth += box(Dimension(1.0, Dimension.LinearUnits.px))
-                alignment = Pos.CENTER
+class MessageHolder(messages: List<Message>): View(){
+    override val root = vbox()
+    init {
+        with(root) {
+            useMaxWidth = false
+            for (message in messages) {
+                add(Message(message.messageBox.text))
+                style {
+                    backgroundColor += c(250, 250, 250, 1.0)
+                }
             }
         }
     }
@@ -107,8 +104,16 @@ class MessageCell(): ListCell<Message>() {
 class Message(private val value: String): View() {
     val messageBox = Label()
     override val root = borderpane {
-        messageBox.text = value
-
-        add(messageBox)
+        center {
+            messageBox.text = value
+            add(messageBox)
+        }
+        setMaxSize(VBox.USE_PREF_SIZE, VBox.USE_PREF_SIZE)
+        padding = Insets(10.0,10.0,10.0,10.0)
+        style {
+            borderColor += box(c("#333333"))
+            borderStyle += BorderStrokeStyle.SOLID
+            borderWidth += box(Dimension(1.0, Dimension.LinearUnits.px))
+        }
     }
 }
