@@ -2,6 +2,7 @@ package com.elfefe.tornadofx
 
 import javafx.beans.Observable
 import javafx.collections.FXCollections
+import javafx.collections.ListChangeListener
 import javafx.collections.ObservableArray
 import javafx.collections.ObservableList
 import javafx.event.EventType
@@ -86,17 +87,26 @@ class TabCom : View() {
     }
 }
 
-class MessageHolder(messages: List<Message>): View(){
+class MessageHolder(messages: ObservableList<Message>): View(){
     override val root = vbox()
     init {
         with(root) {
             useMaxWidth = false
+            // TODO
             for (message in messages) {
                 add(Message(message.messageBox.text))
                 style {
                     backgroundColor += c(250, 250, 250, 1.0)
                 }
             }
+            messages.addListener(ListChangeListener {
+                for (message in it.list) {
+                    add(Message(message.messageBox.text))
+                    style {
+                        backgroundColor += c(250, 250, 250, 1.0)
+                    }
+                }
+            })
         }
     }
 }
