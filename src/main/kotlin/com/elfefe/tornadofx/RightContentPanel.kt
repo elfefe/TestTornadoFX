@@ -14,6 +14,7 @@ import javafx.scene.effect.DropShadow
 import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Region
+import javafx.scene.layout.Region.USE_COMPUTED_SIZE
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import org.intellij.lang.annotations.JdkConstants
@@ -66,10 +67,12 @@ class TabMaps : View() {
 }
 
 class TabCom : View() {
-    private  val message: ObservableList<Message> = FXCollections.observableArrayList(Message("Coucou"))
+    private val message: ObservableList<Message> = FXCollections.observableArrayList(Message("Coucou", "user"))
     override val root = borderpane {
         center {
-            add(MessageHolder(message))
+            scrollpane {
+                add(MessageHolder(message))
+            }
         }
 
         bottom {
@@ -77,7 +80,7 @@ class TabCom : View() {
                 val inputMessage = TextField()
                 val sendMessage = Button()
                 sendMessage.setOnAction {
-                    message.add(Message(inputMessage.text))
+                    message.add(Message(inputMessage.text, "user"))
                 }
 
                 add(inputMessage)
@@ -87,43 +90,49 @@ class TabCom : View() {
     }
 }
 
-class MessageHolder(messages: ObservableList<Message>): View(){
+class MessageHolder(messages: ObservableList<Message>) : View() {
     override val root = vbox()
+
     init {
         with(root) {
-            useMaxWidth = false
-            // TODO
             for (message in messages) {
-                add(Message(message.messageBox.text))
-                style {
-                    backgroundColor += c(250, 250, 250, 1.0)
-                }
+                add(Message(message.messageBox.text, "user"))
             }
             messages.addListener(ListChangeListener {
+                root.clear()
+                if (it.list.size > 50)
+                    it.list.remove(0, it.list.size - 50)
                 for (message in it.list) {
-                    add(Message(message.messageBox.text))
-                    style {
-                        backgroundColor += c(250, 250, 250, 1.0)
-                    }
+                    add(Message(message.messageBox.text, "user"))
                 }
             })
+            style {
+                backgroundColor += c(250, 250, 250, 1.0)
+            }
         }
     }
 }
 
-class Message(private val value: String): View() {
+class Message(private val value: String, private val user: String) : View() {
     val messageBox = Label()
-    override val root = borderpane {
-        center {
-            messageBox.text = value
-            add(messageBox)
+    override val root =
+        hbox {
+            useMaxWidth = true
+            alignment = Pos.CENTER_RIGHT
+            minWidth = HBox.USE_COMPUTED_SIZE
+            prefWidthProperty().bind(primaryStage.widthProperty())
+            borderpane {
+                center {
+                    messageBox.text = value
+                    add(messageBox)
+                }
+                padding = Insets(10.0, 10.0, 10.0, 10.0)
+                style {
+                    borderColor += box(c("#333333"))
+                    borderStyle += BorderStrokeStyle.SOLID
+                    borderWidth += box(Dimension(1.0, Dimension.LinearUnits.px))
+                    alignment = Pos.CENTER_RIGHT
+                }
+            }
         }
-        setMaxSize(VBox.USE_PREF_SIZE, VBox.USE_PREF_SIZE)
-        padding = Insets(10.0,10.0,10.0,10.0)
-        style {
-            borderColor += box(c("#333333"))
-            borderStyle += BorderStrokeStyle.SOLID
-            borderWidth += box(Dimension(1.0, Dimension.LinearUnits.px))
-        }
-    }
 }
