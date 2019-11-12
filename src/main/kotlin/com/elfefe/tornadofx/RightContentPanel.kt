@@ -1,6 +1,7 @@
 package com.elfefe.tornadofx
 
 import javafx.beans.Observable
+import javafx.beans.property.DoubleProperty
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableArray
@@ -69,9 +70,12 @@ class TabMaps : View() {
 class TabCom : View() {
     private val message: ObservableList<Message> = FXCollections.observableArrayList(Message("Coucou", "user"))
     override val root = borderpane {
-        center {
+        center {val tabCenter = this
             scrollpane {
-                add(MessageHolder(message))
+                val viewMessageHolder = MessageHolder(message)
+                viewMessageHolder.root.prefWidthProperty().bind(tabCenter.widthProperty())
+                isFitToWidth = true
+                add(viewMessageHolder)
             }
         }
 
@@ -96,6 +100,8 @@ class MessageHolder(messages: ObservableList<Message>) : View() {
     init {
         with(root) {
             for (message in messages) {
+                val messageView = Message(message.messageBox.text, "user")
+                messageView.root.prefWidthProperty().bind(this.widthProperty())
                 add(Message(message.messageBox.text, "user"))
             }
             messages.addListener(ListChangeListener {
@@ -120,7 +126,6 @@ class Message(private val value: String, private val user: String) : View() {
             useMaxWidth = true
             alignment = Pos.CENTER_RIGHT
             minWidth = HBox.USE_COMPUTED_SIZE
-            prefWidthProperty().bind(primaryStage.widthProperty())
             borderpane {
                 center {
                     messageBox.text = value
