@@ -22,6 +22,7 @@ import org.intellij.lang.annotations.JdkConstants
 import javafx.scene.web.WebEngine
 import javafx.util.Callback
 import tornadofx.*
+import javax.swing.Painter
 import javax.swing.border.Border
 
 class RightContentPanel : View() {
@@ -30,9 +31,11 @@ class RightContentPanel : View() {
 
     override val root = tabpane {
         tab("maps") {
+            isClosable = false
             content = tabMaps.root
         }
         tab("com") {
+            isClosable = false
             content = tabCom.root
         }
 
@@ -126,16 +129,26 @@ class Message(private val value: String, private val user: String) : View() {
             useMaxWidth = true
             alignment = Pos.CENTER_RIGHT
             minWidth = HBox.USE_COMPUTED_SIZE
+            padding = Insets(10.0, 10.0, 10.0, 10.0)
             borderpane {
                 center {
                     messageBox.text = value
+                    messageBox.textFill = c(250,250,250, 1.0)
                     add(messageBox)
                 }
+                val shadow = DropShadow()
+                shadow.color = c(0,0,0, 0.5)
+                shadow.radius = 5.0
+                effect = shadow
                 padding = Insets(10.0, 10.0, 10.0, 10.0)
                 style {
+                    fill = c(150,150,150, 1.0)
+                    backgroundColor += c(100,100,100, 0.6)
+                    backgroundRadius += box(Dimension(8.0, Dimension.LinearUnits.px))
                     borderColor += box(c("#333333"))
                     borderStyle += BorderStrokeStyle.SOLID
                     borderWidth += box(Dimension(1.0, Dimension.LinearUnits.px))
+                    borderRadius += box(Dimension(8.0, Dimension.LinearUnits.px))
                     alignment = Pos.CENTER_RIGHT
                 }
             }

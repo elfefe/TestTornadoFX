@@ -3,25 +3,37 @@ package com.elfefe.tornadofx
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Parent
+import javafx.scene.control.TextField
+import javafx.scene.image.Image
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import tornadofx.*
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
 import javafx.scene.text.TextAlignment
 import java.awt.Color
 import java.awt.Label
+import java.io.FileInputStream
 import javax.swing.GroupLayout
 
 class LeftSideBar : View() {
     override val root = gridpane {
-        add(TopView::class.java)
-        add(BottomView::class.java)
 
-        constraintsForRow(1).percentHeight = 40.0
-        constraintsForRow(2).percentHeight = 60.0
+
+        row {
+            add(TopView::class.java)
+        }
+        row {
+            add(BottomView::class.java)
+        }
+
+        constraintsForRow(0).percentHeight = 40.0
+        constraintsForRow(1).percentHeight = 60.0
+        constraintsForColumn(0).percentWidth = 100.0
+
+        minWidthProperty().bind(primaryStage.widthProperty().multiply(0.2))
 
         style {
-            backgroundColor += c("#eeeeee", 1.0)
         }
     }
 }
@@ -29,16 +41,16 @@ class LeftSideBar : View() {
 class TopView : View() {
     override val root = vbox {
         alignment = Pos.CENTER
-        label {
-            text = "User"
-            alignment = Pos.CENTER
+        isFillWidth = true
+        imageview {
+            val input = FileInputStream("src/main/res/drawable/logo.jpg")
+            image = Image(input, 100.0, 100.0, false, true)
         }
 
-        gridpaneConstraints {
-            fillHeight = true
-            columnIndex = 1
-            rowIndex = 1
-            vAlignment = VPos.CENTER
+        textfield {
+            text = "User"
+            alignment = Pos.CENTER
+            background = Background.EMPTY
         }
 
         style {
@@ -48,7 +60,8 @@ class TopView : View() {
 }
 
 class BottomView : View() {
-    override val root = vbox(100.0) {
+    override val root = vbox {
+        isFillWidth = true
         label {
             text = "Descrition"
             alignment = Pos.CENTER
