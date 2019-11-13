@@ -17,19 +17,18 @@ import java.io.FileInputStream
 import javax.swing.GroupLayout
 
 class LeftSideBar : View() {
-    override val root = gridpane {
+    override val root = vbox {
 
+        val topView = TopView()
+        val bottomView = BottomView()
 
-        row {
-            add(TopView::class.java)
+        heightProperty().addListener { observable, oldValue, newValue ->
+            topView.root.prefHeight = newValue.toDouble() * 0.3
+            bottomView.root.prefHeight = newValue.toDouble() * 0.7
         }
-        row {
-            add(BottomView::class.java)
-        }
 
-        constraintsForRow(0).percentHeight = 40.0
-        constraintsForRow(1).percentHeight = 60.0
-        constraintsForColumn(0).percentWidth = 100.0
+        add(topView)
+        add(bottomView)
 
         minWidthProperty().bind(primaryStage.widthProperty().multiply(0.2))
 
@@ -42,8 +41,9 @@ class TopView : View() {
     override val root = vbox {
         alignment = Pos.CENTER
         isFillWidth = true
+        minWidthProperty().bind(primaryStage.widthProperty().multiply(0.2))
         imageview {
-            val input = FileInputStream("src/main/res/drawable/logo.jpg")
+            val input = FileInputStream("src/main/resources/drawable/logo.jpg")
             image = Image(input, 100.0, 100.0, false, true)
         }
 
