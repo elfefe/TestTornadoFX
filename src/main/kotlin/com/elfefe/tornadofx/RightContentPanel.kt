@@ -18,29 +18,40 @@ import javafx.scene.layout.Region
 import javafx.scene.layout.Region.USE_COMPUTED_SIZE
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
+import javafx.scene.shape.SVGPath
 import org.intellij.lang.annotations.JdkConstants
 import javafx.scene.web.WebEngine
 import javafx.util.Callback
 import tornadofx.*
+import java.io.InputStream
 import javax.swing.Painter
 import javax.swing.border.Border
 
 class RightContentPanel : View() {
     private val tabMaps: TabMaps by inject()
     private val tabCom: TabCom by inject()
+    private val leftIcon = svgicon ("M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z")
 
     override val root = tabpane {
+        button {
+            graphic = leftIcon
+        }
         tab("maps") {
             isClosable = false
             content = tabMaps.root
+
+            style {
+                backgroundColor += Color.WHITE
+            }
         }
         tab("com") {
             isClosable = false
             content = tabCom.root
         }
+        tabMinWidthProperty().bind(widthProperty().divide(tabs.size).subtract(28))
 
         style {
-            backgroundColor += c("#bbbbbb", 1.0)
+            borderWidth += box(Dimension(0.0, Dimension.LinearUnits.px))
         }
     }
 }
@@ -58,13 +69,6 @@ class TabMaps : View() {
 
                 effect = shadow
                 paddingAll = 20.0
-
-
-                style {
-                    borderColor += box(c("#000000"))
-                    borderStyle += BorderStrokeStyle.SOLID
-                    borderWidth += box(Dimension(10.0, Dimension.LinearUnits.px))
-                }
             }
         }
     }
