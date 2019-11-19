@@ -1,5 +1,6 @@
 package com.elfefe.tornadofx
 
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.geometry.VPos
 import javafx.scene.Parent
@@ -17,12 +18,12 @@ import java.io.FileInputStream
 import javax.swing.GroupLayout
 
 class LeftSideBar : View() {
+    val state = SimpleBooleanProperty()
     override val root = vbox {
-
         val topView = TopView()
         val bottomView = BottomView()
 
-        heightProperty().addListener { observable, oldValue, newValue ->
+        heightProperty().addListener { _, _, newValue ->
             topView.root.prefHeight = newValue.toDouble() * 0.3
             bottomView.root.prefHeight = newValue.toDouble() * 0.7
         }
@@ -31,6 +32,9 @@ class LeftSideBar : View() {
         add(bottomView)
 
         minWidthProperty().bind(primaryStage.widthProperty().multiply(0.2))
+        state.addListener { _, _, state ->
+
+        }
 
         style {
         }
