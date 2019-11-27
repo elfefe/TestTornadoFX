@@ -1,42 +1,22 @@
-package com.elfefe.tornadofx
+package com.elfefe.tornadofx.view
 
-import javafx.beans.Observable
-import javafx.beans.binding.IntegerBinding
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableIntegerValue
-import javafx.beans.value.ObservableNumberValue
 import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
-import javafx.collections.ObservableArray
 import javafx.collections.ObservableList
 import javafx.event.EventHandler
-import javafx.event.EventType
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.Parent
 import javafx.scene.control.*
 import javafx.scene.effect.DropShadow
 import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.layout.HBox
-import javafx.scene.layout.Region
-import javafx.scene.layout.Region.USE_COMPUTED_SIZE
-import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
-import javafx.scene.shape.SVGPath
 import javafx.scene.text.TextAlignment
-import org.intellij.lang.annotations.JdkConstants
-import javafx.scene.web.WebEngine
-import javafx.util.Callback
 import tornadofx.*
-import java.io.InputStream
-import javax.swing.Painter
-import javax.swing.border.Border
 
 class RightContentPanel : View() {
     val tabMaps: TabMaps by inject()
@@ -101,25 +81,26 @@ class TabBar : View() {
 }
 
 class TabMaps : View() {
+    private val margin = 20.0
     override val root = borderpane() {
         center {
             webview {
-                val engine: WebEngine = engine
                 engine.load("https://www.google.com/maps/@?api=1&map_action=map")
-
-                val shadow = DropShadow()
-                shadow.radius = 20.0
-                shadow.color = Color.BLACK
-
-                effect = shadow
-                paddingAll = 20.0
+                engine.isJavaScriptEnabled = true
+                effect = DropShadow(margin, Color.BLACK)
+                paddingAll = margin
             }
         }
     }
 }
 
 class TabCom : View() {
-    private val message: ObservableList<Message> = FXCollections.observableArrayList(Message("Coucou", "user"))
+    private val message: ObservableList<Message> = FXCollections.observableArrayList(
+        Message(
+            "Coucou",
+            "user"
+        )
+    )
     override val root = borderpane {
         center {
             val tabCenter = this

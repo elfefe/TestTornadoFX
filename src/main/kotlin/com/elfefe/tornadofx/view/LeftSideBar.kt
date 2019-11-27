@@ -1,21 +1,12 @@
-package com.elfefe.tornadofx
+package com.elfefe.tornadofx.view
 
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.geometry.VPos
-import javafx.scene.Parent
-import javafx.scene.control.TextField
 import javafx.scene.image.Image
 import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
 import tornadofx.*
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.HBox
-import javafx.scene.text.TextAlignment
-import java.awt.Color
-import java.awt.Label
 import java.io.FileInputStream
-import javax.swing.GroupLayout
 
 class LeftSideBar : View() {
     val state = SimpleBooleanProperty()

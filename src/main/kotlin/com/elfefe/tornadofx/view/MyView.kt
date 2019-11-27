@@ -1,6 +1,5 @@
-package com.elfefe.tornadofx
+package com.elfefe.tornadofx.view
 
-import javafx.scene.Parent
 import tornadofx.*
 
 class MyView : View() {
@@ -15,8 +14,6 @@ class MyView : View() {
             lsb.state.set(state)
         }
 
-        minWidth = 800.0
-        minHeight = 600.0
         style {
             backgroundColor += c("#ffffff", 1.0)
         }
